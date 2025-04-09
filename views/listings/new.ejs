@@ -1,0 +1,194 @@
+<%- layout('/layouts/boilerplate.ejs') %>
+
+<body>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <form action="/listings" method="POST"  enctype="multipart/form-data" novalidate class="needs-validation" > 
+                <br><br>
+                <b><h1>Create New Listing</h1></b>
+
+                <div>
+                    <label for="title" class="form-label">Title :</label>
+                    
+                    <br>
+                    <input name="listing[title]" placeholder="Enter title" type="text" class="form-control" required />
+                    <div class="valid-feedback">Title </div>
+                </div>
+
+                <br />
+                <div class="mb-3">
+                    <label for="title" class="form-label ">Description :</label>
+                    <br>
+                    <textarea name="listing[description]" placeholder="Enter description" required class="form-control"></textarea>
+                </div>
+                <br>
+                <div>
+                    <label for="title" class="form-label">Enter Brand :</label>
+                    <input name="listing[company]" placeholder="Enter company name" type="text" required class="form-control" />
+                    <div class="valid-feedback">ok brand </div>
+
+                </div>
+                <br><br>
+
+                <!-- Stock Field with options -->
+                <label for="stock" required>Stock Status:</label>
+                <select name="listing[stock]" id="stock">
+                    <option value="In Stock" class="in-stock">In Stock</option>
+                    <option value="Out of Stock" class="out-stock">Out of Stock</option>
+                </select>
+                <br /><br />
+                
+                <!-- Image Upload with Zoom -->
+                <div>
+                    <label for="image" class="form-label">Upload Image :</label>
+                    <input name="image" type="file" class="form-control"  />
+                    <div class="valid-feedback">ok img </div>
+
+                    <input
+                        id="zoomImage"
+                        name="listing[image]"
+                        placeholder="Enter image URL/Link"
+                        type="text"
+                        class="form-control"
+                       
+                    />
+                </div>
+                <br />
+                <!-- Zoomed Image -->
+                <div class="image-preview">
+                    <h4>Image Preview:</h4>
+                    <img
+                        id="zoomPreview"
+                        src="/images/mali.png" 
+                        data-zoom-image="/images/mali-large.png"
+                        alt="Image Preview"
+                        style="width: 300px;"
+
+                    />
+                </div>
+                <br /><br />
+
+                <div class="col-4">
+                    <div>
+                        <label for="price" class="form-label">Enter Price:</label>
+                    </div>
+                    
+                    <input name="listing[price]" placeholder="Enter pricepak" type="number" class="form-control" required />
+                   
+                </div>
+                <!-- Top Image Upload -->
+<div class="mb-3">
+    <label for="topImage" class="form-label">Upload Top Image:</label>
+    <input name="top" type="file" class="form-control" id="topImageInput" accept="image/png"  />
+    
+    <label for="topUrl" class="form-label mt-2">Or Enter Top Image URL:</label>
+    <input id="topUrl" name="topUrl" type="text" class="form-control" placeholder="Enter image URL" value="" />
+    
+    <div class="image-preview mt-3">
+        <h4>Current Top Image:</h4>
+        <img id="topImagePreview" src="/images/default.png" alt="Top Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+    </div>
+</div>
+
+<!-- Bottom Image Upload -->
+<div class="mb-3">
+    <label for="bottomImage" class="form-label">Upload Bottom Image:</label>
+    <input name="bottom" type="file" class="form-control" id="bottomImageInput" accept="image/png"  />
+    
+    <label for="bottomUrl" class="form-label mt-2">Or Enter Bottom Image URL:</label>
+    <input id="bottomUrl" name="bottomUrl" type="text" class="form-control" placeholder="Enter image URL" value="" />
+    
+    <div class="image-preview mt-3">
+        <h4>Current Bottom Image:</h4>
+        <img id="bottomImagePreview" src="/images/default.png" alt="Bottom Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+    </div>
+</div>
+
+<!-- Left Image Upload -->
+<div class="mb-3">
+    <label for="leftImage" class="form-label">Upload Left Image:</label>
+    <input name="left" type="file" class="form-control" id="leftImageInput" accept="image/png"/>
+    
+    <label for="leftUrl" class="form-label mt-2">Or Enter Left Image URL:</label>
+    <input id="leftUrl" name="leftUrl" type="text" class="form-control" placeholder="Enter image URL" value="" />
+    
+    <div class="image-preview mt-3">
+        <h4>Current Left Image:</h4>
+        <img id="leftImagePreview" src="/images/default.png" alt="Left Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+    </div>
+</div>
+
+<!-- Right Image Upload -->
+<div class="mb-3">
+    <label for="rightImage" class="form-label">Upload Right Image:</label>
+    <input name="right" type="file" class="form-control" id="rightImageInput"accept="image/png" />
+    
+    <label for="rightUrl" class="form-label mt-2">Or Enter Right Image URL:</label>
+    <input id="rightUrl" name="rightUrl" type="text" class="form-control" placeholder="Enter image URL" value="" />
+    
+    <div class="image-preview mt-3">
+        <h4>Current Right Image:</h4>
+        <img id="rightImagePreview" src="/images/default.png" alt="Right Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+    </div>
+</div>
+
+                
+                <label for="price">Price in PKR:</label>
+<input type="number" id="price" name="price" required>
+
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select name="listing[category]" id="category" class="form-control" required>
+                        <option value="">-- Select a Category --</option>
+                        <option value="Men Eyeglasses">Men's Eyeglasses</option>
+                <option value="Women Eyeglasses">Women's Eyeglasses</option>
+                <option value="Kids Eyeglasses">Kids' Eyeglasses</option>
+                <option value="Sunglasses">Sunglasses</option>
+                <option value="Sports & Safety Glasses">Sports & Safety Glasses</option>
+                <option value="Blue Light Glasses">Blue Light Glasses</option>
+                <option value="New Arrivals">New Arrivals</option>
+                <option value="Prescription Glasses">Prescription Glasses</option>
+                    </select>
+                </div>
+                
+                
+                <br /><br />
+                <input name="listing[country]" placeholder="Enter country" type="text" class="form-control" />
+                <br />
+                <input name="listing[location]" placeholder="Enter location" type="text" class="form-control" />
+                <br><br />
+                <div class="row row-5">
+                    <button class="btn btn-dark bg-primary">Add</button>
+                </div>
+                <br><br>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    <script src="/javascript/script.js"></script>
+    <script>
+        // Initialize Zoom Feature
+        $(document).ready(function () {
+            // ElevateZoom for Image Preview
+            $("#zoomPreview").elevateZoom({
+                zoomType: "lens",
+                lensShape: "round",
+                lensSize: 550,
+            });
+
+            // Change preview dynamically
+            $("#zoomImage").on("input", function () {
+                const imageUrl = $(this).val();
+                $("#zoomPreview").attr("src", imageUrl);
+                $("#zoomPreview").data("zoom-image", imageUrl).elevateZoom({
+                    zoomType: "lens",
+                    lensShape: "round",
+                    lensSize: 550,
+                });
+            });
+        });
+    </script>
+</body>

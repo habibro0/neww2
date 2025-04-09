@@ -1,0 +1,1087 @@
+<%- layout('/layouts/boilerplate.ejs') -%>
+
+<body>
+  <div class="listing-container2 my-5">
+    <div class="listing-card shadow-lg rounded d-flex">
+      
+      <!-- Left Side: Listing Image -->
+      <div class="listing-image-container1 flex-shrink-0">
+        <img src="<%= listing.image %>" alt="listing_image" class="listing-card-img">
+      </div>
+      <div class="image-gallery">
+        <img src="<%= listing.top %>" alt="top view" class="small-img1">`
+        <img src="<%= listing.bottom %>" alt="bottom view" class="small-img2">
+        <img src="<%= listing.right %>" alt="right view" class="small-img3">
+  
+      </div>
+
+      <!-- Popup -->
+     
+      
+      
+      <!-- Right Side: Listing Details -->
+      <div class="listing-card-body flex-grow-1 px-4">
+        <h5 class="listing-title1"><%= listing.title %></h5>
+        <i class="owned">Owned by <%= listing.owner.username %></i>
+        
+        <div class="listing-details mt-3">
+          <span class="listing-description1"><%= listing.description %></span>
+          <span class="listing-price1"><p>Rs : <%= listing.price %></p></span>
+          <span class="listing-stock2 <%= listing.stock === 'In Stock' ? 'listing-stock-available' : 'listing-stock-unavailable' %>">
+            <%= listing.stock %>
+
+
+          </span>
+        </div>
+        
+        <p class="listing-company1"><strong></strong> <%= listing.company %></p>
+        
+        <% if (currentUser && currentUser._id.toString() === listing.owner._id.toString()) { %>
+          <a class="btn  listing-edit-btn" href="/listings/<%= listing._id %>/edit">Edit</a>
+          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline-block">
+            <button class="btn-delete">Delete</button>
+          </form>
+        <% } %>
+      </div>
+
+      <!-- Medium Camera Popup -->
+     
+      <!-- Shipping & Delivery Section -->
+      <div class="shipping-delivery px-4 py-3 flex-shrink-0">
+        <h4 class="shipping-title">
+          <i class="fas fa-truck-fast"></i> Shipping & Delivery
+        </h4>
+        <ul class="shipping-list">
+          <li class="shipping-item">
+            <i class="fas fa-shipping-fast"></i> Fast Delivery Available
+          </li>
+          <li class="shipping-item">
+            <i class="fas fa-cash-register"></i> Cash on Delivery Option
+          </li>
+          <li class="shipping-item">
+            <i class="fas fa-headset"></i> 24/7 Support
+          </li>
+          <li class="shipping-item">
+            <i class="fas fa-box"></i> Secure Packaging
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Trigger button -->
+    <button class="tryon" onclick="openModal()" style="margin: 15px; padding: 8px 20px; background: green; color: white; border: none; cursor: pointer;">Try ON👓</button>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="cameraModal" style="display: none; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5);">
+      <div class="modal-content" style="position: relative; padding: 10px; background: white; max-width: 90vw; max-height: 90vh; overflow: auto; border-radius: 8px; text-align: center;">
+          <!-- Close button -->
+          <button class="close-btn" onclick="closeModal()" style="position: absolute; top: 10px; right: 10px;">×</button>
+          <div id="captureArea">
+            <h2>Capture This Area</h2>
+            <p>This part of the screen will be captured.</p>
+          <!-- Camera container -->
+          <div id="container" style="position: relative; width: 100%; max-width: 640px; margin: auto;">
+            <video id="video" autoplay muted playsinline style="width: 100%; border: 2px solid black;"></video>
+            <canvas id="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+            <img id="glasses" src="<%= listing.top %>" style="position: absolute; display: none; transform: translate(-50%, -50%);">
+        </div>
+      
+        </div>
+            <!-- Zoom Controls -->
+            <div style="text-align: center; margin-top: 10px;">
+              <button id="zoomIn" style="padding: 5px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer;">Zoom In</button>
+              <button id="zoomOut" style="padding: 5px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer;">Zoom Out</button>
+              <button id="fit" style="padding: 5px 15px; margin: 5px; background: #28a745; color: white; border: none; cursor: pointer;">Fit</button>
+              <div class="move-controls">
+                <button id="moveUp">⬆ Up</button>
+                <div>
+                    <button id="moveLeft">⬅ Left</button>
+                    <button id="moveRight">➡ Right</button>
+                </div>
+                <button id="moveDown">⬇ Down</button>
+            </div>
+          </div>
+          <!-- --legacy-peer-deps -->
+
+          <!-- Screenshot Button -->
+<!-- Screenshot Button -->
+<!-- Screenshot Button -->
+<button id="captureBtn">📸 Take Picture</button>
+
+    <!-- This is the area we want to capture -->
+
+
+    <!-- Container to Show Small Screenshot -->
+    <div id="screenshotContainer" style="display: flex; gap: 10px; margin-top: 20px;"></div>
+
+    
+      
+    
+          <!-- Status -->
+          <p id="faceStatus" style="text-align:center; margin-top: 10px; font-weight: bold;"></p>
+          <div id="timer" style="font-size: 20px; color: black;"></div>
+    
+      </div>
+    </div>
+    
+    <!-- Related Items Section -->
+    <div class="popup-overlay"></div>
+    <img src="" alt="popup" class="popup-img">
+    <br>
+    <hr>
+    <h2 class="you">You May Also Like</h2>
+    <div class="related-items">
+      <% if (relatedItems && relatedItems.length > 0) { %>
+        <% relatedItems.forEach(item => { %>
+          <a href="/listings/<%= item._id %>" class="related-card">
+            <img src="<%= item.image %>" alt="related image" class="related-card-img">
+            <h3><%= item.title %></h3>
+            <p>Price: <%= item.price %></p>
+          </a>
+        <% }); %>
+      <% } else { %>
+        <p>No related items found.</p>
+      <% } %>
+    </div>
+  
+    <!-- Google Map Embed -->
+    <hr>
+    <iframe src="https://www.google.com/maps/embed?pb=..." width="1200" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  
+  <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 mb-4">
+    <% if(currentUser) { %>
+      <h4 class="text-center text-primary font-weight-bold">Leave a Review</h4>
+      <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation p-4 border rounded shadow-sm bg-light">
+        
+        <div class="mb-3">
+          <fieldset class="starability-slot d-flex flex-column align-items-center">
+            <label for="rating" class="form-label h5">Rating</label>
+            <legend class="text-muted">Choose a rating:</legend>
+            <div class="d-flex gap-2 rev">
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">⭐</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">⭐⭐</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">⭐⭐⭐</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">⭐⭐⭐⭐</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">⭐⭐⭐⭐⭐</label>
+            </div>
+          </fieldset>
+        </div>
+        
+        <div class="mb-3">
+          <label for="comment" class="form-label h5">Comment</label>
+          <textarea id="comment" name="review[comment]" rows="4" class="form-control border-primary shadow-sm" required></textarea>
+          <div class="invalid-feedback">Please enter a comment.</div>
+        </div>
+        
+        <div class="text-center">
+          <button class="btn btn-primary px-4 py-2">Submit</button>
+        </div>
+      </form>
+    <% } %>
+    <hr>
+    <h4 class="text-center text-success font-weight-bold">All Reviews</h4>
+    <div class="row d-flex flex-nowrap overflow-auto px-2" style="gap: 20px;">
+      <% for(review of listing.reviews) { %>
+        <div class="card shadow-sm border-primary" style="min-width: 300px;">
+          <div class="card-body">
+            <h5 class="card-title text-primary"><%= review.author.username %></h5>
+            <p class="starability-result card-text text-warning" data-rating="<%= review.rating%>">
+              <%= '⭐'.repeat(review.rating) %>
+            </p>
+            <p class="card-text text-muted"> <%= review.comment%></p>
+          </div>
+
+    <% if (currentUser && review.author.equals(currentUser._id)) { %>
+      <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+          <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+  <% } %>
+  
+
+  <hr><hr>
+ 
+  
+
+ </div>   
+    <% } %>
+  </div>
+    </div>
+  </div>
+
+  <style>
+    .rev{
+    margin-left: 780px;
+    font-size: 8px;
+    }
+    #captureArea {
+            padding: 20px;
+            background: lightgray;
+            border: 2px dashed black;
+            text-align: center;
+            margin: 20px 0;
+        }
+    .image-gallery {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.small-img:hover {
+    transform: scale(1.8);
+}
+
+/* 🔹 جب کلک ہو تو بڑا دکھے */
+.small-img.active {
+    transform: scale(2.2);
+}
+.image-gallery img {
+  width: 70px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #ccc;
+}
+
+.image-gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup Effect */
+.popup-img {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: auto;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 9999;
+  transition: transform 0.4s ease;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.popup-img.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 9998;
+}
+
+.popup-overlay.active {
+  display: block;
+}
+.modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+    .modal-content {
+        position: relative;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        width: 80%;
+        max-width: 700px;
+        max-height: 90vh;
+        overflow: auto;
+        text-align: center;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 1px;
+        font-size: 20px;
+        color: #007bff;
+        background-color: white;
+        cursor: pointer;
+        z-index: 999999999;
+    }
+    #container {
+        position: relative;
+        text-align: center;
+        width: 100%;
+        max-width: 640px;
+        margin: auto;
+    }
+    video {
+        width: 100%;
+        border: 2px solid black;
+    }
+    #glasses {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        width: 100px; /* Glasses size */
+        display: block;
+    }
+    #captureBtn {
+        margin-top: 15px;
+        padding: 8px 20px;
+        background: red;
+        color: rgb(0, 0, 0);
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    #screenshotContainer {
+        margin-top: 15px;
+        position: relative;
+    }
+    #screenshotContainer img {
+        width: 100%;
+        max-width: 300px;
+        border: 2px solid black;
+    }
+    .screenshot-box {
+        position: relative;
+        display: inline-block;
+    }
+    .screenshot-close {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: red;
+        color: white;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+/* 🔹 Click Effect */
+.active {
+    transform: scale(2.2);
+}
+  </style>
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('overlay');
+    const ctx = canvas.getContext('2d');
+    const glasses = document.getElementById('glasses');
+
+    let zoomLevel = 1; // Default zoom
+    let posX = 0; // X-axis position
+    let posY = 0; // Y-axis position
+    // Zoom In button
+    document.getElementById('zoomIn').addEventListener('click', () => {
+        zoomLevel += 0.1;
+        applyZoom();
+    });
+    document.getElementById("fit").addEventListener("click", () => {
+    autoAdjust();
+});
+    // Zoom Out button
+    document.getElementById('zoomOut').addEventListener('click', () => {
+        zoomLevel = Math.max(0.1, zoomLevel - 0.1); // minimum zoom 0.1x
+        applyZoom();
+    });
+
+    // Fit button (reset zoom)
+    document.getElementById('fit').addEventListener('click', () => {
+        zoomLevel = 1;
+        applyZoom();
+    });
+    document.getElementById("moveLeft").addEventListener("click", () => {
+    posX -= 10;
+    applyTransform();
+});
+document.getElementById("moveRight").addEventListener("click", () => {
+    posX += 10;
+    applyTransform();
+});
+document.getElementById("moveUp").addEventListener("click", () => {
+    posY -= 10;
+    applyTransform();
+});
+document.getElementById("moveDown").addEventListener("click", () => {
+    posY += 10;
+    applyTransform();
+});
+// 🟢 **Apply Transform (Zoom + Move + Rotate)**
+function applyTransform() {
+    glasses.style.transform = `translate(-50%, -50%) scale(${zoomLevel}) rotate(${currentAngle}deg) translate(${posX}px, ${posY}px)`;
+}
+
+// 📌 **Auto Adjust Glasses (Fit Button)**
+function autoAdjust() {
+    zoomLevel = 1; // Default zoom
+    posX = 0; // Reset X position
+    posY = 0; // Reset Y position
+    applyTransform();
+}
+
+    // Apply zoom to glasses image
+    function applyZoom() {
+        glasses.style.transform = `translate(-50%, -50%) scale(${zoomLevel}) rotate(${currentAngle}deg)`;
+    }
+
+    let currentAngle = 0;
+
+    function openModal() {
+        document.getElementById('cameraModal').style.display = 'flex';
+        openCamera();
+    }
+
+    function closeModal() {
+        document.getElementById('cameraModal').style.display = 'none';
+        stopCamera();
+    }
+    async function openCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+
+        video.onloadeddata = async () => {
+            resizeCanvas(); // 🔁 Auto adjust on load
+            window.addEventListener('resize', resizeCanvas); // 🔁 Also resize on window change
+
+            glasses.style.display = 'block';
+            const model = await facemesh.load();
+            detectFace(model, model); // pass model once
+        };
+    } catch (err) {
+        console.error('Camera error:', err);
+    }
+}
+
+function stopCamera() {
+    const stream = video.srcObject;
+    if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+        video.srcObject = null;
+        glasses.style.display = 'none';
+    }
+}
+
+// 🔄 Resize function for every screen
+function resizeCanvas() {
+    const ratio = video.videoWidth / video.videoHeight;
+    const width = video.offsetWidth;
+    const height = width / ratio;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+}
+
+async function detectFace(model) {
+    async function frame() {
+        if (video.readyState === 4) {
+            const predictions = await model.estimateFaces(video);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (predictions.length > 0) {
+                const keypoints = predictions[0].scaledMesh;
+
+                const leftEye = keypoints[33];
+                const rightEye = keypoints[263];
+
+                // 🔄 Ratio matching canvas/video size
+                const videoRect = video.getBoundingClientRect();
+                const scaleX = canvas.width / video.videoWidth;
+                const scaleY = canvas.height / video.videoHeight;
+
+                const centerX = ((leftEye[0] + rightEye[0]) / 2) * scaleX;
+                const centerY = ((leftEye[1] + rightEye[1]) / 2) * scaleY;
+                const eyeDist = Math.hypot(
+                    (rightEye[0] - leftEye[0]) * scaleX,
+                    (rightEye[1] - leftEye[1]) * scaleY
+                );
+
+                currentAngle = Math.atan2(rightEye[1] - leftEye[1], rightEye[0] - leftEye[0]) * (180 / Math.PI);
+
+                glasses.style.left = `${centerX}px`;
+                glasses.style.top = `${centerY}px`;
+                glasses.style.width = `${eyeDist * 2}px`;
+
+                applyTransform();
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+    frame();
+}
+
+// 📌 Camera Modal Open & Close
+document.getElementById("captureBtn").addEventListener("click", async function () {
+    let video = document.getElementById("video");
+    let overlayCanvas = document.getElementById("overlay");
+    let captureArea = document.getElementById("captureArea");
+    let screenshotContainer = document.getElementById("screenshotContainer");
+
+    // 🟢 Smooth Performance کے لیے `requestAnimationFrame` استعمال کریں
+    requestAnimationFrame(async () => {
+        // 1️⃣ پہلے ویڈیو کو ایک کینوس پر ڈرا کریں
+        let ctx = overlayCanvas.getContext("2d");
+        overlayCanvas.width = video.videoWidth;
+        overlayCanvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, overlayCanvas.width, overlayCanvas.height);
+
+        // 2️⃣ پھر پورے captureArea کو کیپچر کریں (ویڈیو + باقی سب)
+        let canvas = await html2canvas(captureArea, {
+            useCORS: true,
+            scale: window.devicePixelRatio,
+            allowTaint: true,
+            foreignObjectRendering: false
+        });
+
+        // 🟢 Thumbnail بنائیں
+        let img = new Image();
+        img.src = canvas.toDataURL("image/png");
+        img.style.width = "120px"; // چھوٹا preview
+        img.style.cursor = "pointer";
+        img.classList.add("thumbnail"); // CSS کلاس
+
+        // 🔥 تصویر پر کلک کریں تو بڑا ہو، اور close کا آپشن دے
+        img.onclick = function () {
+            showFullScreenImage(img.src);
+        };
+
+        // 🟢 Container میں تصویر ڈالیں
+        screenshotContainer.innerHTML = ""; // پرانی ہٹا کر نئی ڈالیں
+        screenshotContainer.appendChild(img);
+    });
+});
+
+// 🟢 فنکشن: بڑی تصویر دکھانے کے لیے
+function showFullScreenImage(src) {
+    let overlay = document.createElement("div");
+    overlay.classList.add("image-overlay");
+
+    let img = new Image();
+    img.src = src;
+    img.classList.add("full-image");
+
+    let closeBtn = document.createElement("span");
+    closeBtn.innerHTML = "✖";
+    closeBtn.classList.add("close-btn");
+    closeBtn.onclick = function () {
+        document.body.removeChild(overlay);
+    };
+
+    overlay.appendChild(img);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+}
+
+</script>
+
+
+<style>
+
+
+  /* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+.thumbnail {
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+.thumbnail:hover {
+    transform: scale(1.1);
+}
+
+/* 🔥 Overlay کے لیے */
+.image-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.full-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Overall Card Container Styling */
+.listing-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1200px;
+  max-height: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Listing Card Styling */
+.listing-card {
+  display: flex;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height:300px;
+  position: relative;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Left Side: Image */
+.listing-image-container1 {
+  flex-shrink: 0;
+  width: 380px;
+  overflow: hidden;
+}
+
+.listing-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+}
+
+.listing-image-container1:hover .listing-card-img {
+  transform: scale(1.05);
+}
+
+/* Right Side: Details */
+.listing-card-body {
+  flex-grow: 1;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.listing-card-body:hover {
+  background-color: #f8f9fa;
+}
+
+.listing-title1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2d3436;
+  line-height: 1.3;
+  position: absolute;
+  top: 5%;
+}
+@media (max-width: 768px) {
+    .move-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (min-width: 769px) {
+    .move-controls {
+        display: none; /* لیپ ٹاپ پر یہ بٹن ہائیڈ ہو جائیں گے */
+    }
+   
+}
+.listing-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+
+
+}
+
+.listing-price1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #27ae60;
+  position: absolute;
+  top: 45%;
+
+
+
+}
+
+
+.owned{
+  position: absolute;
+  top: 90%;
+
+}
+.listing-company1{
+  position: absolute;
+  top: 67%;
+}
+.listing-stock-available {
+  color: #2ecc71;
+  font-weight: 700;
+  position: absolute;
+  top: 47%;
+  background-color: rgb(0, 0, 0);
+  border-radius: 50%;
+  left: 53%;
+  width: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+.listing-stock-unavailable {
+  color: #e74c3c;
+  font-weight: 700;
+  position: absolute;
+  top: 47%;
+  left: 47%;
+}
+
+.listing-description1 {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  flex-grow: 1;
+  position: absolute;
+  top: 25%;
+  /* left: 10%; */
+}
+
+/* Support Section (owned by moved here) */
+.support-section {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.support-section  {
+  font-size: 1.2rem;
+  color: #e67e22;
+}
+
+.tryon{
+  width: 30%;
+}
+/* Shipping & Delivery Section */
+.shipping-delivery {
+  background-color: #ecf0f1;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.shipping-delivery:hover {
+  background-color: #dfe6e9;
+}
+
+.shipping-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d3436;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shipping-title i {
+  font-size: 1.7rem;
+  color: #e67e22;
+}
+
+.shipping-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+.shipping-item {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shipping-item i {
+  font-size: 1.3rem;
+  color: #3498db;
+}
+
+.shipping-item:hover i {
+  color: #e67e22;
+}
+
+.shipping-item:hover {
+  cursor: pointer;
+  color: #2d3436;
+}
+
+/* Related Items Section */
+.related-items {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+}
+
+.related-card {
+  width: 200px;
+  text-align: center;
+  text-decoration: none;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.related-card-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.related-card h3 {
+  font-size: 1.2rem;
+  color: #2d3436;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.related-card p {
+  font-size: 1rem;
+  color: #7f8c8d;
+}
+
+/* Google Map Embed */
+iframe {
+  border-radius: 15px;
+  max-width: 100%;
+  margin-top: 30px;
+  border: none;
+}
+
+/* Buttons */
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 12px 25px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .listing-container {
+    padding: 10px;
+    width: 75vh;
+  }
+  .listing-card-img{
+    width: 60%;
+  }
+
+  .listing-card-body {
+    padding: 15px;
+    gap: 15px;
+   
+    
+  }
+  
+.listing-description1 {
+  position: absolute;
+  left: 3vh;
+  top: 205px;
+}
+
+  .listing-title1 {
+    font-size: 1.6rem;
+    position: absolute;
+    left: 28%;
+  }
+  .listing-stock-available {
+    position: absolute;
+    left: 35%;
+    top: 250px;
+  }
+  .owned{
+    position: absolute;
+    top: 290px;
+    left: 55%;
+    font-weight: 100;
+    
+  }
+  .close-btn{
+   
+ 
+    
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 999999;
+  }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 190vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+
+  .listing-company1{
+    position: absolute;
+    left: 5%;
+    top: 290px;
+  }
+  .tryon{
+    width: 300px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .listing-container {
+    gap: 20px;
+  }
+  .related-items {
+  margin-left: 50px;
+  max-height: 500px; /* یہاں 500px کا اسکرول لیمٹ ہے */
+  overflow-y: auto; /* زیادہ آئٹمز ہوں تو اسکرول آئے */
+  display: flex;
+  flex-direction: column; /* کارڈز ایک کے بعد ایک نیچے آئیں گے */
+  gap: 15px; /* کارڈز کے درمیان اسپیس */
+  padding-right: 10px; /* اسکرول بار کے لیے تھوڑی جگہ */
+}
+
+/* 👇 اسکرول بار کو اسٹائل دو */
+.related-items::-webkit-scrollbar {
+  width: 8px; /* پتلا اسکرول بار */
+}
+
+.related-items::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+.rev{
+  margin-right: 650px;
+  size: 50px;
+}
+.you{
+  margin-left: 50px;
+}
+
+  .listing-card {
+    flex-direction: column;
+    height: 600px;
+  }
+
+  .listing-image-container1 {
+    height: 150px;
+    width: 550px;
+    display: flex;
+    align-items: center;
+  }
+.small-img1{
+  position: absolute;
+  top: 88%;
+  left: 75%;
+}
+.small-img2{
+  position: absolute;
+  top: 88%;
+  left: 75%;
+  display: none;
+}
+.small-img3{
+  position: absolute;
+  top: 88%;
+  left: 75%;
+  display: none;
+}
+  .listing-card-body {
+    padding: 10px;
+  }
+
+  .listing-title1 {
+    font-size: 1.4rem;
+    position: absolute;
+    top: 155px;
+    left: 5%;
+  }
+.owned{
+  position: absolute;
+ 
+}
+  .listing-price1 {
+    font-size: 1rem;
+    position: absolute;
+    top: 39vh;
+    left: 18px;
+  }
+}
+
+
+</style>
+
+
+</body>

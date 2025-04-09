@@ -1,0 +1,78 @@
+<nav class="w-full sticky top-0 z-50 bg-gradient-to-r from-red-400 to-white shadow-md py-3 navbar-glass">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+
+    <!-- Logo + All Items -->
+    <div class="flex items-center space-x-4">
+      <a href="/listings" class="flex items-center space-x-2 logo1">
+        <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743675911/logo_zc4pps.png" alt="Logo" class="h-14 w-auto rounded-xl shadow-lg transition-transform duration-300 hover:scale-105">
+      </a>
+      <a href="/listings" class="navbar-link text-lg">All Items</a>
+    </div>
+
+    <!-- Search Bar -->
+    <form action="/search" method="GET" class="w-full max-w-xl">
+      <div class="relative">
+        <input type="search" name="query" placeholder="Search for VIP items..."
+          class="w-full px-6 py-3 pl-12 rounded-full bg-white/80 backdrop-blur-md text-gray-700 placeholder-gray-500 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400 border border-gray-300 focus:border-red-500 transition-all duration-300">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></i>
+      </div>
+    </form>
+
+    <!-- Icons -->
+    <div class="flex items-center space-x-4 sal">
+      <!-- Cart -->
+      <div class="relative group">
+        <a href="/cart" class="flex items-center text-gray-800 text-lg hover:text-red-600 transition-all space-x-1 nav-icon">
+          <i class="fa-solid fa-cart-shopping text-xl"></i>
+          <span class="md:inline">View Cart</span>
+        </a>
+        <% if (typeof cartCount !== 'undefined' && cartCount > 0) { %>
+          <span class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-2 py-0.5 shadow-sm pulse-badge">
+            <%= cartCount %>
+          </span>
+        <% } %>
+      </div>
+
+      <!-- Favorites -->
+      <a href="#" id="favoritesBtn1" class="text-red-600 hover:text-red-800 text-xl transition-transform nav-icon">
+        <i class="fa-solid fa-heart"></i>
+      </a>
+
+      <!-- User Dropdown -->
+   <!-- User Dropdown -->
+ <!-- User Dropdown -->
+ <li class="nav-item dropdown fa-userr">
+  <a class="nav-link dropdown-toggle text-dark fs-5" href="#" id="userDropdown" role="button"
+     data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-user"></i>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end shadow drop" aria-labelledby="userDropdown">
+    <% if (!currentUser) { %>
+      <li><a class="dropdown-item" href="/signup">Sign Up</a></li>
+      <li><a class="dropdown-item" href="/login">Login</a></li>
+    <% } else { %>
+      <li><a class="dropdown-item" href="/logout">Logout</a></li>
+      <% if (["faisalmotiwala", "karim", "habibro123"].includes(currentUser.username)) { %>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/listings/new">Create Item</a></li>
+        <li><a class="dropdown-item" href="/users">All Users</a></li>
+        <li>
+          <a class="dropdown-item d-flex justify-content-between align-items-center" href="/orders">
+            Orders
+            <% if (pendingOrders > 0) { %>
+              <span class="badge bg-danger ms-1"><%= pendingOrders %></span>
+            <% } %>
+          </a>
+        </li>
+      <% } %>
+    <% } %>
+  </ul>
+</li>
+
+</div>
+
+
+    </div>
+
+  </div>
+</nav>

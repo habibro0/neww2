@@ -1,0 +1,861 @@
+<%- layout('/layouts/boilerplate.ejs') %>
+
+<body>
+
+   
+
+    <div class="category-container">
+        <div class="category-card">
+            <a href="/category/Men%20Eyeglasses">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677884/menss_gjlwr4.png" alt="Men's Eyeglasses" class="category-img">
+                <div class="overlay">
+                    <span class="category-text">Men's Eyeglasses</span>
+                </div>
+            </a>
+        </div>
+    
+        <div class="category-card">
+            <a href="/category/Women%20Eyeglasses">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743676992/women_xwnpin.jpg" alt="Women's Eyeglasses" class="category-img">
+                <div class="overlay">
+                    <span class="category-text">Women's Eyeglasses</span>
+                </div>
+            </a>
+        </div>
+    
+        <div class="category-card">
+            <a href="/category/Kids%20Eyeglasses">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677874/kidss_a9nmeq.png" alt="Kids' Eyeglasses" class="category-img">
+                <div class="overlay">
+                    <span class="category-text">Kids' Eyeglasses</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+
+  
+    <a href="https://wa.me/923194067357" class="whatsapp_container" target="_blank">
+        <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+        <span class="whatsapp_text">Contact for Any Need</span>
+    </a>
+    <div class="all">
+
+        <h2>Our All Products</h2>
+    </div>
+    <div id="listingsContainer">
+        <% allListings.slice(0, 12).forEach((listing, index) => { %>
+            <div class="listing" data-index="<%= index %>">
+                <div class="listing-card">
+                    <h4 class="company-name"><%= listing.company %></h4>
+    
+                    <button class="favorite-btn" onclick="toggleFavorite('<%= listing._id %>')">
+                        <i class="fa fa-heart" id="heart-<%= listing._id %>"></i>
+                    </button>
+    
+                    <a href="/listings/<%= listing._id %>">
+                        <img src="<%= listing.image %>" alt="Product Image" class="listing-img">
+                    </a>
+    
+                    <div class="listing-info">
+                        <h5 class="listing-title"><%= listing.title %></h5>
+                        <p class="price">Rs: <%= listing.price %></p>
+                        <span class="stock-status <%= listing.stock === 'In Stock' ? 'in-stock' : 'out-stock' %>">
+                            <%= listing.stock %>
+                        </span>
+    
+                        <div class="like-dislike-container">
+                            <button class="like-btn" onclick="likeListing('<%= listing._id %>')">
+                                <i class="fa fa-thumbs-up"></i>
+                            </button>
+                            <span id="likes-<%= listing._id %>" class="like-counter"><%= listing.likes || 20 %></span>
+                            <button class="dislike-btn" onclick="dislikeListing('<%= listing._id %>')">
+                                <i class="fa fa-thumbs-down"></i>
+                            </button>
+                        </div>
+    
+                        <% if (listing.stock === 'In Stock') { %>
+                            <form method="POST" action="/cart/add">
+                                <input type="hidden" name="productId" value="<%= listing._id %>">
+                                <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+    <% if (allListings.length > 12) { %>
+        <div class="load-more-container">
+            <button id="loadMoreBtn" onclick="loadMoreListings()">Load More</button>
+        </div>
+    <% } %>
+    
+       <!-- Preloader Section -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <img src="/images/logo.png" alt="Loading..." class="preloader-image">
+      <h1 class="welcome-text">Welcome to <span>Glasses Wear</span></h1>
+    </div>
+  </div>
+        
+          <!-- Main Content -->
+          
+
+    </div>
+
+      <!-- Preloader Section -->
+ 
+    <script>
+       let allListings = <%- JSON.stringify(allListings) %>;
+let visibleCount = 12;  // شروع میں 12 آئٹمز دکھائیں
+
+function loadMoreListings() {
+    let container = document.getElementById("listingsContainer");
+    let newItems = allListings.slice(visibleCount, visibleCount + 12); 
+
+    newItems.forEach((listing) => {
+        let div = document.createElement("div");
+        div.classList.add("listing");
+        div.innerHTML = `
+            <div class="listing-card">
+                <h4 class="company-name">${listing.company}</h4>
+                <button class="favorite-btn" onclick="toggleFavorite('${listing._id}')">
+                    <i class="fa fa-heart" id="heart-${listing._id}"></i>
+                </button>
+                <a href="/listings/${listing._id}">
+                    <img src="${listing.image}" alt="Product Image" class="listing-img">
+                </a>
+                <div class="listing-info">
+                    <h5 class="listing-title">${listing.title}</h5>
+                    <p class="price">Rs: ${listing.price}</p>
+                    <span class="stock-status ${listing.stock === 'In Stock' ? 'in-stock' : 'out-stock'}">
+                        ${listing.stock}
+                    </span>
+                    <div class="like-dislike-container">
+                        <button class="like-btn" onclick="likeListing('${listing._id}')">
+                            <i class="fa fa-thumbs-up"></i>
+                        </button>
+                        <span id="likes-${listing._id}" class="like-counter">${listing.likes || 20}</span>
+                        <button class="dislike-btn" onclick="dislikeListing('${listing._id}')">
+                            <i class="fa fa-thumbs-down"></i>
+                        </button>
+                    </div>
+                    ${listing.stock === 'In Stock' ? `
+                        <form method="POST" action="/cart/add">
+                            <input type="hidden" name="productId" value="${listing._id}">
+                            <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                        </form>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    visibleCount += 12; // ہر بار 12 آئٹمز لوڈ کریں
+
+    // اگر ابھی بھی مزید آئٹمز باقی ہیں، تو بٹن شو کرو
+    if (visibleCount < allListings.length) {
+        document.getElementById("loadMoreBtn").style.display = "block";
+    } else {
+        document.getElementById("loadMoreBtn").style.display = "none"; // جب سب لوڈ ہو جائیں تو ہٹا دو
+    }
+}
+
+   // Check if user is coming from outside the website
+   if (document.referrer === "" || !document.referrer.includes(window.location.hostname)) {
+    // First time visit, show preloader
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById('preloader').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+      }, 3000); // 3 seconds
+    }
+  } else {
+    // User is navigating within the website, hide preloader immediately
+    document.getElementById('preloader').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+  }
+
+    
+  document.addEventListener("DOMContentLoaded", function () {
+        fetchFavorites();  // ✅ جب پیج لوڈ ہو تو Favorites کو دوبارہ لوڈ کریں
+    });
+
+    document.getElementById("favoritesBtn").addEventListener("click", function () {
+        document.getElementById("favoritesPopup").style.display = "block";
+    });
+
+    function closeFavoritesPopup() {
+        document.getElementById("favoritesPopup").style.display = "none";
+    }
+
+    async function toggleFavorite(listingId) {
+        let isLoggedIn = <%= currentUser ? 'true' : 'false' %>;
+
+        if (!isLoggedIn) {
+            window.location.href = "/login"; 
+            return;
+        }
+
+        const response = await fetch(`/favorite/${listingId}`, { method: "POST" });
+        const data = await response.json();
+
+        if (data.success) {
+            let heartIcon = document.getElementById(`heart-${listingId}`);
+            heartIcon.classList.toggle("favorited");
+            updateFavoritesList(data.favorites);
+        }
+    }
+
+    function fetchFavorites() {
+        fetch("/get-favorites")
+            .then(response => response.json())
+            .then(data => {
+                updateFavoritesList(data.favorites);
+
+                // ✅ ہر فیورٹ آئٹم کے لیے ہارٹ ریڈ کریں
+                data.favorites.forEach(item => {
+                    let heartIcon = document.getElementById(`heart-${item.id}`);
+                    if (heartIcon) {
+                        heartIcon.classList.add("favorited");
+                    }
+                });
+            });
+    }
+
+    function updateFavoritesList(favorites) {
+        let favContainer = document.getElementById("favorites-list");
+        favContainer.innerHTML = "";
+
+        if (favorites.length > 0) {
+            favorites.forEach(item => {
+                let favItem = document.createElement("div");
+                favItem.innerHTML = `
+                    <div class="favorite-item">
+                        <img src="${item.image}" width="50">
+                        <span>${item.title}</span>
+                    </div>
+                `;
+                favContainer.appendChild(favItem);
+            });
+        } else {
+            favContainer.innerHTML = "<p>No favorites added</p>";
+        }
+    }
+        function filterCategory(category) {
+            const listings = document.querySelectorAll('.listing');
+            listings.forEach(listing => {
+                listing.style.transition = 'opacity 0.5s ease-in-out';
+                listing.style.opacity = 0;
+            });
+
+            setTimeout(() => {
+                listings.forEach(listing => {
+                    const listingCategory = listing.getAttribute('data-category');
+                    if (category === "All Items" || listingCategory === category) {
+                        listing.style.display = 'block';
+                        listing.style.opacity = 1;
+                    } else {
+                        listing.style.display = 'none';
+                    }
+                });
+                window.scrollTo({
+                    top: 720,
+                    behavior: 'smooth'
+                });
+            }, 500);
+        }
+// Function to show a temporary message
+function showMessage(text) {
+    let msgBox = document.getElementById("vote-message");
+    if (!msgBox) {
+        msgBox = document.createElement("div");
+        msgBox.id = "vote-message";
+        msgBox.style.position = "fixed";
+        msgBox.style.top = "10px";
+        msgBox.style.left = "50%";
+        msgBox.style.transform = "translateX(-50%)";
+        msgBox.style.background = "#ffcc00";
+        msgBox.style.color = "#000";
+        msgBox.style.padding = "10px 20px";
+        msgBox.style.borderRadius = "5px";
+        msgBox.style.boxShadow = "0 0 10px rgba(0,0,0,0.2)";
+        msgBox.style.fontSize = "16px";
+        msgBox.style.fontWeight = "bold";
+        msgBox.style.zIndex = "9999";
+        document.body.appendChild(msgBox);
+    }
+    msgBox.innerText = text;
+    msgBox.style.display = "block";
+
+    // Hide message after 2 seconds
+    setTimeout(() => {
+        msgBox.style.display = "none";
+    }, 2000);
+}
+
+async function likeListing(listingId) {
+    if (localStorage.getItem(`vote-${listingId}`)) return showMessage("⚠️ You have already voted!");
+    
+    const response = await fetch(`/listings/${listingId}/like`, { method: "POST" });
+    const data = await response.json();
+    
+    if (data.success) {
+        const likeCounter = document.getElementById(`likes-${listingId}`);
+        likeCounter.innerText = data.likes;
+        likeCounter.classList.add("liked");
+        setTimeout(() => likeCounter.classList.remove("liked"), 500);
+        
+        localStorage.setItem(`vote-${listingId}`, "liked"); // ووٹ کو محفوظ کرنا
+        document.getElementById(`like-btn-${listingId}`).disabled = true;
+        document.getElementById(`dislike-btn-${listingId}`).disabled = true;
+    }
+}
+
+async function dislikeListing(listingId) {
+    if (localStorage.getItem(`vote-${listingId}`)) return showMessage("⚠️ You have already voted!");
+    
+    const response = await fetch(`/listings/${listingId}/dislike`, { method: "POST" });
+    const data = await response.json();
+    
+    if (data.success) {
+        const likeCounter = document.getElementById(`likes-${listingId}`);
+        likeCounter.innerText = data.likes;
+        likeCounter.classList.add("disliked");
+        setTimeout(() => likeCounter.classList.remove("disliked"), 500);
+        
+        localStorage.setItem(`vote-${listingId}`, "disliked"); // ووٹ کو محفوظ کرنا
+        document.getElementById(`like-btn-${listingId}`).disabled = true;
+        document.getElementById(`dislike-btn-${listingId}`).disabled = true;
+    }
+}
+
+// جب پیج لوڈ ہو، تو بٹن کا اسٹیٹس چیک کرے
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[id^='like-btn-'], [id^='dislike-btn-']").forEach(btn => {
+        const listingId = btn.id.split("-").pop();
+        if (localStorage.getItem(`vote-${listingId}`)) {
+            document.getElementById(`like-btn-${listingId}`).disabled = true;
+            document.getElementById(`dislike-btn-${listingId}`).disabled = true;
+        }
+    });
+});
+
+         </script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+    }
+    .load-more-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto; /* بٹن کو تھوڑا اوپر لانے کے لیے */
+}
+
+#loadMoreBtn {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#loadMoreBtn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+    #listingsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+
+}
+
+.listing {
+    display: flex;
+    justify-content: center;
+}
+
+.listing-card {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+}
+
+.listing-card:hover {
+    transform: scale(1.05);
+}
+
+/* کمپنی کا نام بیچ میں */
+.company-name {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    background: #f8f8f8;
+}
+
+/* فیورٹ آئیکن کو سائیڈ پر رکھنا */
+.favorite-btn {
+    position: absolute;
+    top: -5px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #888;
+    cursor: pointer;
+}
+
+.favorite-btn:hover {
+    color: red;
+}
+
+.listing-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.listing-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.price {
+    font-size: 20px;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.stock-status {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+    
+}
+
+.in-stock {
+    color: green;
+    /* position: absolute; */
+}
+
+.out-stock {
+    color: red;
+}
+
+.like-dislike-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.like-btn, .dislike-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+.all {
+    text-align: center;
+    margin: 50px 0;
+    position: relative;
+}
+
+.all h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 10px 20px;
+    position: relative;
+    background: linear-gradient(135deg, #4CAF50, #2196F3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glowText 2s infinite alternate;
+}
+
+.all h2::before,
+.all h2::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 4px;
+    background: #4CAF50;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease-in-out;
+}
+
+.all h2::before {
+    left: -60px;
+}
+
+.all h2::after {
+    right: -60px;
+}
+
+.all h2:hover::before,
+.all h2:hover::after {
+    width: 80px;
+    background: #2196F3;
+}
+
+/* Text Glow Animation */
+@keyframes glowText {
+    0% { text-shadow: 0 0 10px rgba(76, 175, 80, 0.7); }
+    100% { text-shadow: 0 0 20px rgba(33, 150, 243, 0.9); }
+}
+
+@media (max-width: 768px) {
+    .all h2 {
+        font-size: 24px;
+    }
+
+    .all h2::before,
+    .all h2::after {
+        width: 30px;
+    }
+
+    .all h2:hover::before,
+    .all h2:hover::after {
+        width: 50px;
+    }
+}
+
+.add-to-cart-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #27ae60;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background: #219150;
+}
+
+
+    .in-stock {
+        color: #ffffff;
+        background: #28a745;
+        padding: 5px 15px;
+        border-radius: 8px;
+    }
+
+    .out-stock {
+        color: #ffffff;
+        background: #d32f2f;
+        padding: 5px 15px;
+        border-radius: 8px;
+    }
+
+   
+
+    .category {
+        font-size: 14px;
+        color: #777;
+        margin-top: 12px;
+        font-weight: 500;
+    }
+
+   
+    .popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        z-index: 999;
+    }
+
+    .popup-visible {
+        display: flex;
+        opacity: 1;
+    }
+
+    .popup-content {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        width: 350px;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+    .category-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px 0;
+    flex-wrap: wrap;
+}
+
+.category-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff7eb3, #ff758c);
+}
+
+.category-card:nth-child(2) {
+    background: linear-gradient(45deg, #85ffbd, #fffb7d);
+}
+
+.category-card:nth-child(3) {
+    background: linear-gradient(45deg, #7afcff, #23a6d5);
+}
+
+.category-card:nth-child(4) {
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+.category-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.category-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.category-card:hover::before {
+    opacity: 1;
+}
+
+.category-img {
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease-in-out, filter 0.4s ease-in-out;
+    filter: brightness(90%);
+}
+
+.category-card:hover .category-img {
+    transform: scale(1.1);
+    filter: brightness(100%);
+    color: #444;
+}
+
+.category-title {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease-in-out;
+}
+
+.category-card:hover .category-title {
+    transform: translateY(-8px);
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.category-card:hover .overlay {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.category-text {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+        /* WhatsApp Button Container */
+        .whatsapp_container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* WhatsApp Button Hover Effect */
+        .whatsapp_container:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* WhatsApp Icon */
+        .whatsapp-icon {
+            font-size: 25px;
+        }
+
+        /* WhatsApp Text */
+        .whatsapp_text {
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+    
+
+    .category {
+        font-size: 12px; /* Smaller category font */
+        margin-top: 10px;
+    }
+ 
+
+/* Like & Dislike Buttons */
+.like-btn, .dislike-btn {
+    border: none;
+    background-color: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Red Color for Like */
+.like-btn {
+    color: blue;
+}
+
+/* Blue Color for Dislike */
+.dislike-btn {
+    color: red;
+}
+
+/* Hover Effects */
+.like-btn:hover {
+    transform: scale(1.3);
+    color: darkblue;
+
+}
+
+.dislike-btn:hover {
+    transform: scale(1.3);
+    color: darkred;
+
+}
+
+/* Like Counter Styling */
+.like-counter {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Animation on Like */
+.like-counter.liked {
+    color: blue;
+    font-size: 20px;
+    transform: scale(1.2);
+}
+
+/* Animation on Dislike */
+.like-counter.disliked {
+    color: red;
+    font-size: 20px;
+    transform: scale(1.2);
+}
+
+
+
+/* Responsive Optimized */
+@media (max-width: 480px) {
+    .listing-img {
+        height: 180px;
+    }
+    .listing-title {
+        font-size: 0.9rem;
+    }
+    .price {
+        font-size: 0.9rem;
+    }
+}
+
+  
+        
+        /* Responsive Design: Hide Text on Small Screens */
+        @media (max-width: 640px) {
+            .whatsapp_text {
+                display: none;
+            }
+
+            .whatsapp_container {
+                padding: 10px;
+                width: 50px;
+                height: 50px;
+                justify-content: center;
+                border-radius: 50%;
+            }
+        }
+</style>
+
+
+
+
+
+
+</body>

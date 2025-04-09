@@ -1,0 +1,9 @@
+<form action="/admin/edit-category/<%= category._id %>" method="POST">
+    <label>Category Name:</label>
+    <input type="text" name="name" value="<%= category.name %>" required>
+
+    <label>Image Path:</label>
+    <input type="text" name="image" value="<%= category.image %>" required>
+
+    <button type="submit">Update Category</button>
+</form>

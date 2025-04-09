@@ -1,0 +1,227 @@
+  <!-- Category Filter -->
+
+
+<!-- Category Filter -->
+
+<div class="category-filter">
+    <div class="category-item">
+        <a href="/category/Men%20Eyeglasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677204/men_tsggup.jpg" alt="Men's Eyeglasses" class="category-image">
+                <span>Men's Eyeglasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/Women%20Eyeglasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743676992/women_xwnpin.jpg" alt="Women Eyeglasses" class="category-image">
+                <span>Women's Eyeglasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/Kids%20Eyeglasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677264/kids_rrwnmw.png" alt="Kids Eyeglasses" class="category-image">
+                <span>Kid's Eyeglasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/Sunglasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677325/sung_zx4xyb.jpg" alt="Sunglasses" class="category-image">
+                <span>Sunglasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/Sports%20&%20Safety%20Glasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677577/sports_xa0srw.jpg" alt="Sports & Safety Glasses" class="category-image">
+                <span>Sports & Safety Glasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/Blue%20Light%20Glasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677676/blue_fktpeq.jpg" alt="Blue Light Glasses" class="category-image">
+                <span>Blue Light Glasses</span>
+            </button>
+        </a>
+    </div>
+
+    <div class="category-item">
+        <a href="/category/New%20Arrivals">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677733/new_w5ugzz.jpg" alt="New Arrivals" class="category-image">
+                <span>New Arrivals</span>
+            </button>
+        </a>
+    </div>
+    
+
+    <div class="category-item">
+        <a href="/category/Prescription%20Glasses">
+            <button class="category-btn">
+                <img src="https://res.cloudinary.com/dzp0yscrc/image/upload/v1743677793/pre_bchvjg.jpg" alt="Prescription Glasses" class="category-image">
+                <span>Prescription Glasses</span>
+            </button>
+        </a>
+    </div>
+</div>
+<style>
+    *{
+        border: none;
+    }
+    /* Category Filter container */
+    .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 50px 30px;
+    background: linear-gradient(145deg, #f5f7fa, #c3cfe2);
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s ease-in-out;
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.category-filter:hover {
+    background: linear-gradient(145deg, #e0c3fc, #8ec5fc);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+}
+
+.category-item {
+    flex: 0 0 calc(25% - 30px);
+    max-width: calc(25% - 30px);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.category-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.category-btn:hover {
+    transform: scale(1.05);
+}
+
+.category-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+    /* Perfect centering fix */
+    display: block;
+}
+
+.category-btn:hover .category-image {
+    transform: scale(1.15);
+    border-color: #6a11cb;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.category-btn span {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.category-btn:hover span {
+    color: #6a11cb;
+    transform: translateY(-4px);
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #6a11cb;
+    color: #fff;
+    border: none;
+    padding: 15px 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+    background: #2575fc;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: -40px;
+}
+
+.next-btn {
+    right: -40px;
+}
+
+@media (max-width: 1024px) {
+    .category-item {
+        flex: 0 0 calc(33.33% - 20px);
+        max-width: calc(33.33% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .category-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .category-filter {
+        padding: 30px 15px;
+    }
+
+    .scroll-btn {
+        display: none;
+    }
+}
+
+</style>
+
+
+

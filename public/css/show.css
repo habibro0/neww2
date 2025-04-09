@@ -1,0 +1,33 @@
+.small-img1{
+    position: absolute;
+    left: 70%;
+    top: 75%;
+   
+}
+.small-img2{
+    position: absolute;
+    left: 80%;
+    top: 75%;
+   
+}
+.small-img3{
+    position: absolute;
+    left: 90%;
+    top: 75%;
+   
+}
+.small-img4{
+    position: absolute;
+    left: 70%;
+    top: 75%;
+   
+}
+button:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+#scanBtn {
+    background: linear-gradient(to right, red, blue);
+    border-radius: 5px;
+}

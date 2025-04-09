@@ -1,0 +1,9 @@
+<h2>Your Favorite Listings</h2>
+<ul>
+    <% favorites.forEach(fav => { %>
+        <li>
+            <img src="<%= fav.image %>" width="50">
+            <strong><%= fav.title %></strong>
+        </li>
+    <% }) %>
+</ul>

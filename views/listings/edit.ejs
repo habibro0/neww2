@@ -1,0 +1,159 @@
+<%- layout('/layouts/boilerplate.ejs') %>
+
+<body>
+  <h3 class="text-center my-4">Edit your Listing</h3>
+  
+      <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 offset-md-2">
+          
+          <!-- Title Field -->
+          <div class="mb-3">
+            <label for="title" class="form-label">Title :</label>
+            <input name="listing[title]" type="text" class="form-control" placeholder="Enter title" value="<%= listing.title %>" required />
+          </div>
+
+          <!-- Description Field -->
+          <div class="mb-3">
+            <label for="description" class="form-label">Description :</label>
+            <textarea name="listing[description]" class="form-control" rows="4" placeholder="Enter description" required><%= listing.description %></textarea>
+          </div>
+
+          <!-- Brand Field -->
+          <div class="mb-3">
+            <label for="company" class="form-label">Brand:</label>
+            <input name="listing[company]" type="text" class="form-control" placeholder="Enter company name" value="<%= listing.company %>" required />
+          </div>
+
+          <!-- Stock Dropdown -->
+          <div class="mb-3">
+            <label for="stock" class="form-label">Stock Status:</label>
+            <select name="listing[stock]" class="form-select">
+              <option value="In Stock" <%= listing.stock === 'In Stock' ? 'selected' : '' %>>In Stock</option>
+              <option value="Out of Stock" <%= listing.stock === 'Out of Stock' ? 'selected' : '' %>>Out of Stock</option>
+            </select>
+          </div>
+
+          <!-- Image Upload + Preview -->
+          <div class="mb-3">
+            <label for="image" class="form-label">Upload Image:</label>
+            <input name="image" type="file" class="form-control" id="imageInput" />
+            
+            <label for="zoomImage" class="form-label mt-2">Or Enter Image URL:</label>
+            <input id="zoomImage" name="listing[image]" type="text" class="form-control" placeholder="Enter image URL" value="<%= listing.image %>" />
+            
+            <div class="image-preview mt-3">
+                <h4>Current Image:</h4>
+                <img id="imagePreview" src="<%= listing.image ? listing.image : '/images/default.png' %>" 
+                     alt="Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+            </div>
+        </div>
+        <br>
+        <div class="mb-3">
+          <label for="topImage" class="form-label">Upload Top Image:</label>
+          <input name="top" type="file" class="form-control" id="topImageInput" accept="image/png" />
+          
+          <label for="topUrl" class="form-label mt-2">Or Enter Top Image URL:</label>
+          <input id="topUrl" name="listing[top]" type="text" class="form-control" placeholder="Enter image URL" value="<%= listing ? listing.top : '' %>" />
+          
+          <div class="image-preview mt-3">
+              <h4>Current Top Image:</h4>
+              <img id="topImagePreview" src="<%= listing && listing.top ? listing.top : '/images/default.png' %>" 
+                   alt="Top Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+          </div>
+      </div>
+<br>
+<div class="mb-3">
+  <label for="bottomImage" class="form-label">Upload Bottom Image:</label>
+  <input name="bottom" type="file" class="form-control" id="bottomImageInput" accept="image/png" />
+  
+  <label for="bottomUrl" class="form-label mt-2">Or Enter Bottom Image URL:</label>
+  <input id="bottomUrl" name="bottomUrl" type="text" class="form-control" placeholder="Enter image URL" value="<%= listing ? listing.bottom : '' %>" />
+  
+  <div class="image-preview mt-3">
+      <h4>Current Bottom Image:</h4>
+      <img id="bottomImagePreview" src="<%= listing && listing.bottom ? listing.bottom : '/images/default.png' %>" 
+           alt="Bottom Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+  </div>
+</div>
+<br>
+
+<br>
+<div class="mb-3">
+  <label for="rightImage" class="form-label">Upload Right Image:</label>
+  <input name="right" type="file" class="form-control" id="rightImageInput" accept="image/png" />
+  
+  <label for="rightUrl" class="form-label mt-2">Or Enter Right Image URL:</label>
+  <input id="rightUrl" name="rightUrl" type="text" class="form-control" placeholder="Enter image URL" value="<%= listing ? listing.right : '' %>" />
+  
+  <div class="image-preview mt-3">
+      <h4>Current Right Image:</h4>
+      <img id="rightImagePreview" src="<%= listing && listing.right ? listing.right : '/images/default.png' %>" 
+           alt="Right Image Preview" class="img-thumbnail" style="max-width: 300px;" />
+  </div>
+</div>
+<br>
+          <!-- Price Field -->
+          <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input name="listing[price]" type="number" class="form-control" placeholder="Enter price" value="<%= listing.price %>" required />
+          </div>
+
+          <!-- Category Dropdown -->
+          <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select name="listing[category]" class="form-control" required>
+              <option value="">-- Select a Category --</option>
+              <option value="Men Eyeglasses" <%= listing.category === "MenEyeglasses" ? 'selected' : '' %>>Men's Eyeglasses</option>
+              <option value="Women Eyeglasses" <%= listing.category === "Women Eyeglasses" ? 'selected' : '' %>>Women's Eyeglasses</option>
+              <option value="Kids Eyeglasses" <%= listing.category === "Kids Eyeglasses" ? 'selected' : '' %>>Kids' Eyeglasses</option>
+              <option value="Sunglasses" <%= listing.category === "Sunglasses" ? 'selected' : '' %>>Sunglasses</option>
+              <option value="Sports & Safety Glasses" <%= listing.category === "Sports & Safety Glasses" ? 'selected' : '' %>>Sports & Safety Glasses</option>
+              <option value="Blue Light Glasses" <%= listing.category === "Blue Light Glasses"? 'selected' : '' %>>Blue Light Glasses</option>
+              <option value="New Arrivals" <%= listing.category === "New Arrivals" ? 'selected' : '' %>>New Arrivals</option>
+              <option value="Prescription Glasses" <%= listing.category === "Prescription Glasses" ? 'selected' : '' %>>Prescription Glasses</option>
+            </select>
+          </div>
+
+          <!-- Country & Location Fields -->
+          <div class="mb-3">
+            <label for="country" class="form-label">Country:</label>
+            <input name="listing[country]" type="text" class="form-control" placeholder="Enter country" value="<%= listing.country %>" />
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location:</label>
+            <input name="listing[location]" type="text" class="form-control" placeholder="Enter location" value="<%= listing.location %>" />
+          </div>
+
+          <!-- Submit Button -->
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Update Listing</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Image Preview Script -->
+  <script>
+    document.getElementById("zoomImage").addEventListener("input", function() {
+      document.getElementById("imagePreview").src = this.value;
+    });
+
+    document.getElementById("imageInput").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById("imagePreview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+</body>

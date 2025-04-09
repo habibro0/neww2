@@ -1,0 +1,175 @@
+<footer class="custom-footer">
+  <div class="footer-container">
+    <!-- Social Media Icons -->
+    <div class="social-icons">
+      <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://youtube.com" target="_blank" aria-label="YouTube" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+      <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+      <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin"></i></a>
+    </div>
+
+    <!-- Subscription Form -->
+    <div class="subscription-container">
+      <h3>Subscribe to our Newsletter</h3>
+      <form id="subscription-form">
+        <input type="email" id="email-input" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <p id="subscription-message" class="hidden">Thanks for your subscription!</p>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="footer-links">
+      <a href="/about">About Us</a>
+      <a href="/services">Our Services</a>
+      <a href="/products">Products</a>
+      <a href="/contact">Contact</a>
+      <a href="/location">Location</a>
+      <a href="/faq">FAQs</a>
+      <a href="/careers">Careers</a>
+      <a href="/blog">Blog</a>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms-and-conditions">Terms & Conditions</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+      &copy; Glasses Wear 2025. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("subscription-form").addEventListener("submit", function(event) {
+  event.preventDefault();
+  
+  const emailInput = document.getElementById("email-input");
+  const messageDiv = document.getElementById("subscription-message");
+
+  emailInput.style.display = "none"; // ✅ Email فیلڈ غائب کر دیں
+  messageDiv.classList.remove("hidden"); // ✅ میسج شو کریں
+  messageDiv.style.opacity = "1";
+  
+  setTimeout(() => {
+    messageDiv.style.opacity = "0"; // ✅ میسج آہستہ آہستہ غائب ہو جائے گا
+  }, 3000);
+});
+</script>
+
+<style>
+  /* 🔥 پروفیشنل اور ماڈرن اسٹائل 🔥 */
+.custom-footer {
+  background: #111;
+  color: #fff;
+  padding: 50px 20px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0px -4px 12px rgba(0, 0, 0, 0.5);
+  border-top: 3px solid #FFD369;
+}
+.footer-container {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 🌟 سوشل آئیکنز کی اسٹائلنگ */
+.social-icons {
+  margin-bottom: 15px;
+}
+.social-icons a {
+  color: #FFD369;
+  font-size: 24px;
+  margin: 0 12px;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+.social-icons a:hover {
+  transform: scale(1.4);
+  text-shadow: 0 0 10px #FFD369;
+}
+
+/* 📩 سبسکرپشن فارم */
+.subscription-container {
+  margin: 20px 0;
+  text-align: center;
+}
+.subscription-container h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #FFD369;
+}
+.subscription-container form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.subscription-container input {
+  padding: 12px;
+  width: 260px;
+  border: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+.subscription-container input:focus {
+  outline: 2px solid #FFD369;
+}
+.subscription-container button {
+  padding: 12px 18px;
+  border: none;
+  background: #FFD369;
+  color: #111;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.2s;
+}
+.subscription-container button:hover {
+  background: #FFA500;
+  transform: scale(1.05);
+}
+
+/* ✅ سبسکرپشن میسج */
+#subscription-message {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #FFD369;
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
+}
+.hidden {
+  display: block;
+  opacity: 0;
+}
+
+/* 📌 فوٹر لنکس */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 15px; /* تھوڑا نیچے لے آیا */
+}
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s, transform 0.3s, text-shadow 0.3s;
+}
+.footer-links a:hover {
+  color: #FFD369;
+  transform: scale(1.1);
+  text-shadow: 0 0 8px #FFD369;
+}
+
+/* 🔹 کاپی رائٹ ٹیکسٹ */
+.copyright {
+  margin-top: 25px; /* مزید نیچے لے آیا */
+  font-size: 13px;
+  opacity: 0.8;
+  color: #aaa;
+}
+
+</style>
